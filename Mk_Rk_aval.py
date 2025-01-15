@@ -16,7 +16,7 @@ if __name__ == "__main__":
     rkeys=cipher.key_expansion(mkey)
 
     rkeys_bits = utils.convert_to_2d_bit_list(rkeys)
-
+#ded
 
 
     # for each bit in mk
