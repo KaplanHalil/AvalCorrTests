@@ -136,19 +136,21 @@ def sum_2d_lists(list1, list2):
 
 if __name__ == "__main__":
 
-    # Example usage
-    list1 = [
-    [1, 2, 3],
-    [4, 5, 6],
-    [7, 8, 9]
-    ]
+    unique_strings = []
 
-    list2 = [
-    [9, 8, 7],
-    [6, 5, 4],
-    [3, 2, 1]
-    ]
+    # Generate 10,000 unique strings
+    for i in range(10000):
+        # Convert the counter `i` to a hexadecimal string with zero-padding
+        hex_value = ''.join(f"{(i + j) % 256:02x}" for j in range(32))
+        unique_string = f"0x{hex_value}"
+        unique_strings.append(unique_string)
 
-    result = sum_2d_lists(list1, list2)
-    print("Resultant 2D Summed List:")
-    print(result)
+    # Optional: Print the first 10 strings as a preview
+    for string in unique_strings[:10]:
+        print(string)
+
+    # If you want to save these strings to a file, uncomment the following lines:
+    # with open("unique_strings.txt", "w") as f:
+    #     f.write("\n".join(unique_strings))
+
+
