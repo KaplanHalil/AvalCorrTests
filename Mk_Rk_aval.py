@@ -15,10 +15,12 @@ def convert_2d_list(input_list):
             return 50
         elif 350 <= value < 400:
             return 100
-        elif 400 <= value < 500:
+        elif 400 <= value < 450:
             return 150
-        elif 500 <= value < 600:
+        elif 450 <= value < 550:
             return 255
+        elif 550 <= value < 600:
+            return 210
         elif 600 <= value < 700:
             return 150
         elif 700 <= value < 800:
@@ -35,7 +37,7 @@ def convert_2d_list(input_list):
 if __name__ == "__main__":
 
     # PIL accesses images in Cartesian co-ordinates, so it is Image[columns, rows]
-    img = Image.new( 'L', (128*15,256), "black") # create a new black image
+    img = Image.new( 'L', (round_key_size*8*round_key,mkey_size*8), "black") # create a new black image
     pixels = img.load() # create the pixel map
 
     # for each bit in mk
@@ -48,7 +50,7 @@ if __name__ == "__main__":
         for k in range(1000):
         
             # Convert the counter `k` to a hexadecimal string with zero-padding
-            hex_value = ''.join(f"{(k + j) % 256:02x}" for j in range(32))
+            hex_value = ''.join(f"{(k + j) % 256:02x}" for j in range(mkey_size))
             unique_key = f"0x{hex_value}"
     
             mkey = utils.str_to_int_array(unique_key)
