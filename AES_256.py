@@ -1,5 +1,6 @@
 import utils
 
+plaintext_size = 16  #bytes
 ciphertext_size = 16  #bytes
 mkey_size= 32 #bytes
 round_key_size = 16 #bytes

@@ -91,7 +91,7 @@ if __name__ == "__main__":
 
     img.save("aval_mk-rk.png")
     b=time.time()
-    print("Time of aval mk-rk: ",b-a)
+    print("Time of aval mk-rk: ",(b-a)/60," minutes")
 
 
 

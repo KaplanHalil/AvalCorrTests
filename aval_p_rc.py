@@ -1,10 +1,10 @@
 """
-mk-rc Aval Test
+p-rc Aval Test
 
-Rasgele 1000 adet mk alir ve her bir bitini tek tek değiştirip round ciktilarini hesaplar.
+Rasgele 1000 adet p alir ve her bir bitini tek tek değiştirip round ciktilarini hesaplar.
 Genel beklenti rc'daki her bit bitin 450-550 arasinda değişmesidir.
 Buna göre convert_2d_list fonksiyonunda 255 beyaz 0 siyah olacak şekilde piksellere renk atar.
-Çikti olarak verdiği resimde sol taraf mk bitleri üst raraf rc bitleri.
+Çikti olarak verdiği resimde sol taraf p bitleri üst raraf rc bitleri.
 
 
 """
@@ -47,37 +47,40 @@ if __name__ == "__main__":
 
     a = time.time()
     # PIL accesses images in Cartesian co-ordinates, so it is Image[columns, rows]
-    img = Image.new( 'L', (cipher.ciphertext_size*8*cipher.num_rounds,cipher.mkey_size*8), "black") # create a new black image
+    img = Image.new( 'L', (cipher.ciphertext_size*8*cipher.num_rounds,cipher.plaintext_size*8), "black") # create a new black image
     pixels = img.load() # create the pixel map
 
-    # for each bit in mk
-    for i in range(0,cipher.mkey_size*8):
+    # for each bit in plaintext
+    for i in range(0,cipher.plaintext_size*8):
     
         # Define empty list to store result
         result = [[0]*(cipher.ciphertext_size*8)]*cipher.num_rounds
 
-        # Generate 1000 unique keys
+        # Generate 1000 unique plaintexts
         for k in range(1000):
         
             # Convert the counter `k` to a hexadecimal string with zero-padding
-            hex_value = ''.join(f"{(k + j) % 256:02x}" for j in range(cipher.mkey_size))
-            unique_key = f"0x{hex_value}"
+            hex_value = ''.join(f"{(k + j) % 256:02x}" for j in range(cipher.plaintext_size))
+            unique_p = f"0x{hex_value}"
     
-            mkey = utils.str_to_int_array(unique_key)
+            plaintext = utils.str_to_int_array(unique_p)
 
-            mkey_bits=utils.int_list_to_bit_list(mkey)
+            plaintext_bits=utils.int_list_to_bit_list(plaintext)
 
-            plaintext = utils.str_to_int_array("0x00112233445566778899aabbccddeeff")
+            mkey= [0]*cipher.mkey_size
 
             ciphertext=cipher.return_rc(plaintext,mkey) # round ciphertexts
 
             ciphertext_bits = utils.convert_to_2d_bit_list(ciphertext)
 
             # change value of bit
-            mkey_bits[i] = mkey_bits[i]^1
-            # Compute new mk and c
-            new_mkey = utils.bit_list_to_int_list(mkey_bits)
-            new_ciphertext=cipher.return_rc(plaintext,new_mkey)
+            plaintext_bits[i] = plaintext_bits[i]^1
+
+            new_plaintext = utils.bit_list_to_int_list(plaintext_bits)
+
+            # Compute new rc
+            new_ciphertext=cipher.return_rc(new_plaintext,mkey)
+
             new_ciphertext_bits = utils.convert_to_2d_bit_list(new_ciphertext)
             # xor new and old rc to find different bits
             fark=utils.xor_2d_lists(ciphertext_bits,new_ciphertext_bits)
@@ -91,9 +94,9 @@ if __name__ == "__main__":
                pixels[j,i] = (draw_list[j]) # set the colour accordingly
         
 
-    img.save("aval_mk-rc.png")
+    img.save("aval_p-rc.png")
     b=time.time()
-    print("Time of aval_mk-rc: ",(b-a)/60,"minutes")
+    print("Time of aval_p-rc: ",(b-a)/60,"minutes")
 
 
 
