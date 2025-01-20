@@ -1,5 +1,5 @@
 """
-mk-rk Aval Test
+mk-c Aval Test
 
 Rasgele 1000 adet mk alir ve her bir bitini tek tek değiştirip round keyleri hesaplar.
 Genel beklenti rk'daki her bit bitin 450-550 arasında değişmesidir.
@@ -14,8 +14,8 @@ import utils
 import AES_256 as cipher
 
 mkey_size= 32 #bytes
-round_key_size = 16 #bytes
-round_key = 15 # number of subkeys
+ciphertext_size = 16 #bytes
+
 
 # takes 2d list and converts it to 1d list
 def convert_2d_list(input_list):
@@ -48,7 +48,7 @@ def convert_2d_list(input_list):
 if __name__ == "__main__":
 
     # PIL accesses images in Cartesian co-ordinates, so it is Image[columns, rows]
-    img = Image.new( 'L', (round_key_size*8*round_key,mkey_size*8), "black") # create a new black image
+    img = Image.new( 'L', (ciphertext_size*8,mkey_size*8), "black") # create a new black image
     pixels = img.load() # create the pixel map
 
     # for each bit in mk
@@ -68,18 +68,20 @@ if __name__ == "__main__":
 
             mkey_bits=utils.int_list_to_bit_list(mkey)
 
-            rkeys=cipher.key_expansion(mkey)
+            plaintext = utils.str_to_int_array("0x00112233445566778899aabbccddeeff")
 
-            rkeys_bits = utils.convert_to_2d_bit_list(rkeys)
+            ciphertext=cipher.encrypt(plaintext,mkey)
+
+            ciphertext_bits = utils.int_list_to_bit_list(ciphertext)
 
             # change value of bit
             mkey_bits[i] = mkey_bits[i]^1
-            # Compute new mk and rk
+            # Compute new mk and c
             new_mkey = utils.bit_list_to_int_list(mkey_bits)
-            new_rkeys=cipher.key_expansion(new_mkey)
-            new_rkeys_bits = utils.convert_to_2d_bit_list(new_rkeys)
+            new_ciphertext=cipher.encrypt(plaintext,new_mkey)
+            new_ciphertext_bits = utils.int_list_to_bit_list(new_ciphertext)
             # xor new and old rk to find different bits
-            fark=utils.xor_2d_lists(rkeys_bits,new_rkeys_bits)
+            fark=utils.xor_2d_lists(ciphertext_bits,new_ciphertext_bits)
             # accumilate different bits
             result=utils.sum_2d_lists(result,fark)
 
@@ -91,7 +93,7 @@ if __name__ == "__main__":
                pixels[j,i] = (draw_list[j]) # set the colour accordingly
         
 
-    img.save("aval_mk-rk.png")
+    img.save("aval_mk-c.png")
 
 
 
