@@ -12,10 +12,8 @@ Buna göre convert_2d_list fonksiyonunda 255 beyaz 0 siyah olacak şekilde pikse
 from PIL import Image
 import utils
 import AES_256 as cipher
+import time
 
-mkey_size= 32 #bytes
-round_key_size = 16 #bytes
-round_key = 15 # number of subkeys
 
 # takes 2d list and converts it to 1d list
 def convert_2d_list(input_list):
@@ -47,21 +45,22 @@ def convert_2d_list(input_list):
 
 if __name__ == "__main__":
 
+    a=time.time()
     # PIL accesses images in Cartesian co-ordinates, so it is Image[columns, rows]
-    img = Image.new( 'L', (round_key_size*8*round_key,mkey_size*8), "black") # create a new black image
+    img = Image.new( 'L', (cipher.round_key_size*8*cipher.round_key,cipher.mkey_size*8), "black") # create a new black image
     pixels = img.load() # create the pixel map
 
     # for each bit in mk
-    for i in range(0,mkey_size*8):
+    for i in range(0,cipher.mkey_size*8):
     
         # Define empty list to store result
-        result = [[0]*(round_key_size*8)]*round_key
+        result = [[0]*(cipher.round_key_size*8)]*cipher.round_key
 
         # Generate 1000 unique keys
         for k in range(1000):
         
             # Convert the counter `k` to a hexadecimal string with zero-padding
-            hex_value = ''.join(f"{(k + j) % 256:02x}" for j in range(mkey_size))
+            hex_value = ''.join(f"{(k + j) % 256:02x}" for j in range(cipher.mkey_size))
             unique_key = f"0x{hex_value}"
     
             mkey = utils.str_to_int_array(unique_key)
@@ -85,13 +84,14 @@ if __name__ == "__main__":
 
         
         draw_list = convert_2d_list(result)
-        #print(len(draw_list))
-        #print(len(result))
+        
         for j in range(img.size[0]):    # For every row
                pixels[j,i] = (draw_list[j]) # set the colour accordingly
         
 
     img.save("aval_mk-rk.png")
+    b=time.time()
+    print("Time of aval mk-rk: ",b-a)
 
 
 
