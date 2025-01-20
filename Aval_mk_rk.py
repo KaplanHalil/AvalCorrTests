@@ -1,3 +1,14 @@
+"""
+mk-rk Aval Test
+
+Rasgele 1000 adet mk alir ve her bir bitini tek tek değiştirip round keyleri hesaplar.
+Genel beklenti rk'daki her bit bitin 450-550 arasında değişmesidir.
+Buna göre convert_2d_list fonksiyonunda 255 beyaz 0 siyah olacak şekilde piksellere renk atar.
+Çikti olarak verdiği resimde sol taraf mk bitleri üst raraf rk bitleri.
+
+
+"""
+
 from PIL import Image
 import utils
 import AES_256 as cipher
@@ -80,7 +91,7 @@ if __name__ == "__main__":
                pixels[j,i] = (draw_list[j]) # set the colour accordingly
         
 
-    img.save("aval_mk-rk.ppm")
+    img.save("aval_mk-rk.png")
 
 
 
