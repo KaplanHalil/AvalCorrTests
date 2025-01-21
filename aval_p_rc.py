@@ -11,7 +11,7 @@ Buna göre convert_2d_list fonksiyonunda 255 beyaz 0 siyah olacak şekilde pikse
 
 from PIL import Image
 import utils
-import AES_256 as cipher
+import Alg as cipher
 import time
 
 

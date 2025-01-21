@@ -54,7 +54,7 @@ if __name__ == "__main__":
     for i in range(0,cipher.mkey_size*8):
     
         # Define empty list to store result
-        result = [[0]*(cipher.round_key_size*8)]*cipher.round_key
+        result = [[0 for _ in range(cipher.round_key_size * 8)] for _ in range(cipher.round_key)]
 
         # Generate 1000 unique keys
         for k in range(1000):
@@ -71,12 +71,10 @@ if __name__ == "__main__":
 
             rkeys_bits = utils.convert_to_2d_bit_list(rkeys)
 
-            for j in range(0,cipher.round_key_size*8*cipher.round_key):
-
-                if mkey_bits[i] == rkeys_bits
-
-            
-
+            for m in range(len(rkeys_bits)):
+                for n in range(len(rkeys_bits[0])):
+                    if rkeys_bits[m][n] == mkey_bits[i]:
+                        result[m][n] += 1
         
         draw_list = convert_2d_list(result)
         
@@ -84,10 +82,10 @@ if __name__ == "__main__":
                pixels[j,i] = (draw_list[j]) # set the colour accordingly
         
 
-    img.save("aval_mk-rk.png")
+    img.save("corr_mk-rk.png")
     b=time.time()
-    print("Time of aval mk-rk: ",(b-a)/60," minutes")
+    print("Time of corr mk-rk: ",(b-a)/60," minutes")
 
-
+    
 
     
