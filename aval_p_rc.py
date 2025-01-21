@@ -54,8 +54,7 @@ if __name__ == "__main__":
     for i in range(0,cipher.plaintext_size*8):
     
         # Define empty list to store result
-        result = [[0]*(cipher.ciphertext_size*8)]*cipher.num_rounds
-
+        result = [[0 for _ in range(cipher.ciphertext_size * 8)] for _ in range(cipher.num_rounds)]
         # Generate 1000 unique plaintexts
         for k in range(1000):
         

@@ -1,5 +1,5 @@
 """
-mk-rk Aval Test
+mk-rk Corr Test
 
 Rasgele 1000 adet mk alir ve her bir bitini tek tek değiştirip round keyleri hesaplar.
 Genel beklenti rk'daki her bit bitin 450-550 arasında değişmesidir.
@@ -11,7 +11,7 @@ Buna göre convert_2d_list fonksiyonunda 255 beyaz 0 siyah olacak şekilde pikse
 
 from PIL import Image
 import utils
-import Alg as cipher
+import AES_256 as cipher
 import time
 
 
@@ -54,7 +54,8 @@ if __name__ == "__main__":
     for i in range(0,cipher.mkey_size*8):
     
         # Define empty list to store result
-        result = [[0 for _ in range(cipher.round_key_size*8)] for _ in range(cipher.round_key)]
+        result = [[0 for _ in range(cipher.round_key_size * 8)] for _ in range(cipher.round_key)]
+
         # Generate 1000 unique keys
         for k in range(1000):
         
@@ -70,17 +71,10 @@ if __name__ == "__main__":
 
             rkeys_bits = utils.convert_to_2d_bit_list(rkeys)
 
-            # change value of bit
-            mkey_bits[i] = mkey_bits[i]^1
-            # Compute new mk and rk
-            new_mkey = utils.bit_list_to_int_list(mkey_bits)
-            new_rkeys=cipher.key_schedule(new_mkey)
-            new_rkeys_bits = utils.convert_to_2d_bit_list(new_rkeys)
-            # xor new and old rk to find different bits
-            fark=utils.xor_2d_lists(rkeys_bits,new_rkeys_bits)
-            # accumilate different bits
-            result=utils.sum_2d_lists(result,fark)
-
+            for m in range(len(rkeys_bits)):
+                for n in range(len(rkeys_bits[0])):
+                    if rkeys_bits[m][n] == mkey_bits[i]:
+                        result[m][n] += 1
         
         draw_list = convert_2d_list(result)
         
@@ -88,10 +82,10 @@ if __name__ == "__main__":
                pixels[j,i] = (draw_list[j]) # set the colour accordingly
         
 
-    img.save("aval_mk-rk.png")
+    img.save("corr_mk-rk.png")
     b=time.time()
-    print("Time of aval mk-rk: ",(b-a)/60," minutes")
+    print("Time of corr mk-rk: ",(b-a)/60," minutes")
 
-
+    
 
     

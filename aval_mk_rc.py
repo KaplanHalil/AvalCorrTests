@@ -11,7 +11,7 @@ Buna göre convert_2d_list fonksiyonunda 255 beyaz 0 siyah olacak şekilde pikse
 
 from PIL import Image
 import utils
-import AES_256 as cipher
+import Alg as cipher
 import time
 
 
@@ -54,7 +54,7 @@ if __name__ == "__main__":
     for i in range(0,cipher.mkey_size*8):
     
         # Define empty list to store result
-        result = [[0]*(cipher.ciphertext_size*8)]*cipher.num_rounds
+        result = [[0 for _ in range(cipher.ciphertext_size*8)] for _ in range(cipher.num_rounds)]
 
         # Generate 1000 unique keys
         for k in range(1000):
