@@ -134,6 +134,15 @@ def sum_2d_lists(list1, list2):
     return result
 
 
+def convert_2d_list_to_1d(two_d_list):
+    """
+    Converts a 2D list into a 1D list.
+
+    :param two_d_list: List of lists (2D list)
+    :return: Flattened 1D list
+    """
+    return [item for sublist in two_d_list for item in sublist]
+
 if __name__ == "__main__":
 
     unique_strings = []
