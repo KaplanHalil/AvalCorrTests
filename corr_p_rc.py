@@ -1,10 +1,10 @@
 """
-mk-rk Corr Test
+p-rc Corr Test
 
-Rasgele 1000 adet mk alir ve her bir bitini tek tek değiştirip round keyleri hesaplar.
-Genel beklenti rk'daki her bit bitin 450-550 arasında değişmesidir.
+Rasgele 1000 adet p alir ve her bir bitini tek tek değiştirip round çiktilaini hesaplar.
+Genel beklenti rc'deki her bit bitin 450-550 arasında değişmesidir.
 Buna göre convert_2d_list fonksiyonunda 255 beyaz 0 siyah olacak şekilde piksellere renk atar.
-Çikti olarak verdiği resimde sol taraf mk bitleri üst raraf rk bitleri.
+Çikti olarak verdiği resimde sol taraf p bitleri üst raraf rc bitleri.
 
 
 """
@@ -47,33 +47,33 @@ if __name__ == "__main__":
 
     a=time.time()
     # PIL accesses images in Cartesian co-ordinates, so it is Image[columns, rows]
-    img = Image.new( 'L', (cipher.round_key_size*8*cipher.round_key,cipher.mkey_size*8), "black") # create a new black image
+    img = Image.new( 'L', (cipher.ciphertext_size*8*cipher.num_rounds,cipher.plaintext_size*8), "black") # create a new black image
     pixels = img.load() # create the pixel map
 
-    # for each bit in mk
-    for i in range(0,cipher.mkey_size*8):
+    # for each bit in plaintext
+    for i in range(0,cipher.plaintext_size*8):
     
         # Define empty list to store result
-        result = [[0 for _ in range(cipher.round_key_size * 8)] for _ in range(cipher.round_key)]
+        result = [[0 for _ in range(cipher.ciphertext_size * 8)] for _ in range(cipher.num_rounds)]
 
         # Generate 1000 unique keys
         for k in range(1000):
         
             # Convert the counter `k` to a hexadecimal string with zero-padding
-            hex_value = ''.join(f"{(k + j) % 256:02x}" for j in range(cipher.mkey_size))
-            unique_key = f"0x{hex_value}"
+            hex_value = ''.join(f"{(k + j) % 256:02x}" for j in range(cipher.plaintext_size))
+            unique_p = f"0x{hex_value}"
     
-            mkey = utils.str_to_int_array(unique_key)
+            plaintext = utils.str_to_int_array(unique_p)
 
-            mkey_bits=utils.int_list_to_bit_list(mkey)
+            plaintext_bits=utils.int_list_to_bit_list(plaintext)
 
-            rkeys=cipher.key_schedule(mkey)
+            ciphertext=cipher.return_rc(plaintext,[0]*cipher.mkey_size) # round ciphertexts
 
-            rkeys_bits = utils.convert_to_2d_bit_list(rkeys)
+            ciphertext_bits = utils.convert_to_2d_bit_list(ciphertext)
 
-            for m in range(len(rkeys_bits)):
-                for n in range(len(rkeys_bits[0])):
-                    if rkeys_bits[m][n] == mkey_bits[i]:
+            for m in range(len(ciphertext_bits)):
+                for n in range(len(ciphertext_bits[0])):
+                    if ciphertext_bits[m][n] == plaintext_bits[i]:
                         result[m][n] += 1
         
         draw_list = convert_2d_list(result)
@@ -82,9 +82,9 @@ if __name__ == "__main__":
                pixels[j,i] = (draw_list[j]) # set the colour accordingly
         
 
-    img.save("corr_mk-rk.png")
+    img.save("corr_p-rc.png")
     b=time.time()
-    print("Time of corr mk-rk: ",(b-a)/60," minutes")
+    print("Time of corr p-rc: ",(b-a)/60," minutes")
 
     
 
